@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(cors({ origin: "*" }));
 
 // Create Account
-app.get("/create-account", async (req,res) => {
+app.post("/create-account", async (req,res) => {
     const { fullName, email, password } = req.body;
 
     if (!fullName || !email || !password) {
@@ -27,6 +27,31 @@ app.get("/create-account", async (req,res) => {
     if (isUser) {
         return res.status(400).json({ error: true, message: "User already exists" });
     }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = new User({
+        fullName,
+        email,
+        password: hashedPassword,
+    });
+
+    await user.save();
+
+    const accessToken = jwt.sign(
+        { userId: user._id },
+        process.env.ACCESS_TOKEN_SECRET,
+        {
+            expiresIn: "72h",
+        }
+    );
+
+    return res.status(201).json({
+        error: false,
+        user: { fullName: user.fullName, email: user.email },
+        accessToken,
+        message: "Registration Successfil",
+    });
 });
 
 app.listen(8000);

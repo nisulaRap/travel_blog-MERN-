@@ -91,9 +91,20 @@ app.post("/login", async (req,res) => {
 });
 
 // Get User
-app.post("/get-user", authenticateToken, async (req,res) => {
+app.get("/get-user", authenticateToken, async (req,res) => {
+   const { userId } = req.user;
+   
+   const isUser = await User.findOne({ _id: userId });
 
-})
+   if(!isUser){
+    return res.sendStatus(401);
+   }
+
+   return res.json({
+    user: isUser,
+    message: "",
+   });
+});
 
 app.listen(8000);
 module.exports = app;

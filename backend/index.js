@@ -7,6 +7,8 @@ const express = require("express");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 
+const { authenticateToken } = require("./utilities");
+
 const User = require("./models/user_model");
 
 mongoose.connect(config.connectionString);
@@ -87,6 +89,11 @@ app.post("/login", async (req,res) => {
         accessToken,
     });
 });
+
+// Get User
+app.post("/get-user", authenticateToken, async (req,res) => {
+
+})
 
 app.listen(8000);
 module.exports = app;

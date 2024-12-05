@@ -10,6 +10,7 @@ const jwt = require("jsonwebtoken");
 const { authenticateToken } = require("./utilities");
 
 const User = require("./models/user_model");
+const TravelBlog = require("./models/travelBlog_model");
 
 mongoose.connect(config.connectionString);
 
@@ -105,6 +106,9 @@ app.get("/get-user", authenticateToken, async (req,res) => {
     message: "",
    });
 });
+
+// Add Travel Blog
+app.get("/add-travel", authenticateToken, async (req,res) => {});
 
 app.listen(8000);
 module.exports = app;

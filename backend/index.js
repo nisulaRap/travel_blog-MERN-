@@ -108,7 +108,15 @@ app.get("/get-user", authenticateToken, async (req,res) => {
 });
 
 // Add Travel Blog
-app.get("/add-travel", authenticateToken, async (req,res) => {});
+app.post("/add-travel", authenticateToken, async (req,res) => {
+    const { title, story, visitedLocation, imageUrl, visitedDate } = req.body;
+    const { userId } = req.user
+
+    // Validate required fields
+    if(!title || !story || !visitedLocation || !imageUrl || !visitedDate){
+        return res.status(400).json({ error: true, message: "All fields are required" });
+    }
+});
 
 app.listen(8000);
 module.exports = app;

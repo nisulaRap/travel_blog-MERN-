@@ -13,7 +13,7 @@ const storage = multer.diskStorage({
 
 // File filter to accept only images
 const fileFilter = (req, file, cb) => {
-    if(file.nimetype.startsWith("image/")){
+    if(file.mimetype.startsWith("image/")){
         cb(null, true);
     }else{
         cb(new Error("Only images are allowed"), false);

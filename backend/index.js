@@ -110,6 +110,53 @@ app.get("/get-user", authenticateToken, async (req,res) => {
    });
 });
 
+// Route to handle image upload
+app.post("/image-upload", upload.single("image"), async (req,res) => {
+    try{
+        if(!req.file){
+            return res.status(400).json({ error: true, message: "No image uploaded" });
+        }
+
+        const imageUrl = `http://localhost:8000/uploads/${req.file.filename}`;
+
+        res.status(201).json({ imageUrl });
+    }catch(error){
+        res.status(500).json({ error: true, message: error.message });
+    }
+});
+
+// Delete an image from uploads folder
+app.delete("/delete-image", async(req, res) => {
+    const { imageUrl } = req.query;
+
+    if(!imageUrl){
+        return res.status(400).json({ error: true, message: "imageUrl parameter is required" });
+    }
+
+    try{
+        // Extract the filename from the imageUrl
+        const filename = path.basename(imageUrl);
+
+        // Define the file path
+        const filePath = path.join(__dirname, 'uploads', filename);
+
+        // Check if the file exists
+        if(fs.existsSync(filePath)){
+            // Delete the file from the uploads folder
+            fs.unlinkSync(filePath);
+            res.status(200).json({ message: "Image deleted successfully" });
+        }else{
+            res.status(200).json({ error: true, message: "Image not found" });
+        }
+    }catch(error){
+        res.status(500).json({ error: true, message: error.message });
+    }
+});
+
+// Serve static files from the uploads and assets directory
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/assets", express.static(path.join(__dirname, "assets")));
+
 // Add Travel Blog
 app.post("/add-travel", authenticateToken, async (req,res) => {
     const { title, story, visitedLocation, imageUrl, visitedDate } = req.body;
@@ -154,23 +201,8 @@ app.get("/get-all-blogs", authenticateToken, async (req,res) => {
     }
 });
 
-// Route to handle image upload
-app.post("/image-upload", upload.single("image"), async (req,res) => {
-    try{
-        if(!req.file){
-            return res.status(400).json({ error: true, message: "No image uploaded" });
-        }
-
-        const imageUrl = `http://localhost:8000/uploads/${req.file.filename}`;
-
-        res.status(201).json({ imageUrl });
-    }catch(error){
-        res.status(500).json({ error: true, message: error.message });
-    }
-});
-
-// Serve static files from the uploads and assets directory
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+// Get All Travel Blog
+app.get("/get-all-blogs", authenticateToken, async (req,res) => {});
 
 app.listen(8000);
 module.exports = app;

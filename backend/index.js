@@ -116,7 +116,43 @@ app.post("/add-travel", authenticateToken, async (req,res) => {
     if(!title || !story || !visitedLocation || !imageUrl || !visitedDate){
         return res.status(400).json({ error: true, message: "All fields are required" });
     }
+
+    // Convert visitedDate from milliseconds to Date object
+    const parsedVisitedDate = new Date(parseInt(visitedDate));
+
+    try{
+        const travelStory = new TravelBlog({
+            title,
+            story,
+            visitedLocation,
+            userId,
+            imageUrl,
+            visitedDate: parsedVisitedDate,
+        });
+
+        await travelStory.save();
+        res.status(201).json({ story: travelStory, message: 'Added Successfully' });
+    }catch(error){
+        res.status(400).json({ story: true, message: error.message });
+    }
 });
+
+// Get All Travel Blog
+app.get("/get-all-blogs", authenticateToken, async (req,res) => {
+    const { userId } = req.user;
+
+    try{
+        const travelStories = await TravelBlog.find({ userId: userId }).sort({
+            isFavourite: -1,
+        });
+        res.status(200).json({ stories: travelStories });
+    }catch(error){
+        res.status(500).json({ error: true, message: error.message });
+    }
+});
+
+// Route to handle image upload
+app.post("/image-upload", authenticateToken, async (req,res) => {});
 
 app.listen(8000);
 module.exports = app;

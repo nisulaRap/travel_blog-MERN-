@@ -201,8 +201,41 @@ app.get("/get-all-blogs", authenticateToken, async (req,res) => {
     }
 });
 
-// Get All Travel Blog
-app.get("/get-all-blogs", authenticateToken, async (req,res) => {});
+// Edit Travel Blog
+app.post("/edit-blog/:id", authenticateToken, async (req,res) => {
+    const { id } = req.params;
+    const { title, story, visitedLocation, imageUrl, visitedDate } = req.body;
+    const { userId } = req.user;
+
+    // Validate required fields
+    if(!title || !story || !visitedLocation || !imageUrl || !visitedDate){
+        return res.status(400).json({ error: true, message: "All fields are required" });
+    }
+
+    // Convert visitedDate from milliseconds to Date object
+    const parsedVisitedDate = new Date(parseInt(visitedDate));
+
+    try{
+        // Find the travel story by ID and ensure it belongs to the authenticated user
+        const travelStory = await TravelBlog.findOne({ _id: id, userId: userId});
+        if(!travelStory){
+            return res.status(404).json({ error: true, message: "Travel story not found" });
+        }
+
+        const placeholderImgUrl = `http://localhost:8000/assets/travel-blog.png`;
+
+        travelStory.title = title;
+        travelStory.story = story;
+        travelStory.visitedLocation = visitedLocation;
+        travelStory.imageUrl = imageUrl || placeholderImgUrl;
+        travelStory.visitedDate = parsedVisitedDate;
+
+        await travelStory.save();
+        res.status(200).json({ story: travelStory, message: "Update Successful" });
+    }catch(error){
+        res.status(500).json({ error: true, message: error.message });
+    }
+});
 
 app.listen(8000);
 module.exports = app;

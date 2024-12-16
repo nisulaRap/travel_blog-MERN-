@@ -322,5 +322,27 @@ app.get("/search", authenticateToken, async (req,res) => {
     }
 });
 
+// Filter travel stories by date range
+app.get("/travel-stories/filter", authenticateToken, async (req,res) => {
+    const { startDate, endDate } = req.query;
+    const { userId } = req.user;
+
+    try{
+        // Convert startDate and endDate from milliseconds to Date objects
+        const start = new Date(parseInt(startDate));
+        const end = new Date(parseInt(endDate));
+
+        //Find travel stories that belong to the authenticated user and fall within the date range
+        const filteredStories = await TravelBlog.find({
+            userId: userId,
+            visitedDate: { $gte: start, $lte: end },
+        }).sort({ isFavourite: -1 });
+
+        res.status(200).json({ stories: filteredStories })
+    }catch(error){
+        res.status(500).json({ error: true, message: error.message });
+    }
+});
+
 app.listen(8000);
 module.exports = app;

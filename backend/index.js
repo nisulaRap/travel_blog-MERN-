@@ -14,6 +14,7 @@ const { authenticateToken } = require("./utilities");
 
 const User = require("./models/user_model");
 const TravelBlog = require("./models/travelBlog_model");
+const { error } = require("console");
 
 mongoose.connect(config.connectionString);
 
@@ -202,7 +203,7 @@ app.get("/get-all-blogs", authenticateToken, async (req,res) => {
 });
 
 // Edit Travel Blog
-app.post("/edit-blog/:id", authenticateToken, async (req,res) => {
+app.put("/edit-blog/:id", authenticateToken, async (req,res) => {
     const { id } = req.params;
     const { title, story, visitedLocation, imageUrl, visitedDate } = req.body;
     const { userId } = req.user;
@@ -269,6 +270,28 @@ app.delete("/delete-blog/:id", authenticateToken, async (req,res) => {
         });
 
         res.status(200).json({ message: "Travel story deleted successfully" });
+    }catch(error){
+        res.status(500).json({ error: true, message: error.message });
+    }
+});
+
+// Update isFavourite
+app.put("/update-is-favourite/:id", authenticateToken, async (req,res) => {
+    const { id } = req.params;
+    const { isFavourite } = req.body;
+    const { userId } = req.user;
+
+    try{
+        const travelStory = await travelStory.findOne({ _id: id, userId: userId });
+
+        if(!travelStory){
+            return res.status(404).json({ error: true, message: "Travel story not found" });
+        }
+
+        travelStory.isFavourite = isFavourite;
+
+        await travelStory.save();
+        res.status(200).json({ story:travelStory, message:'Update Successful' });
     }catch(error){
         res.status(500).json({ error: true, message: error.message });
     }

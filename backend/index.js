@@ -237,5 +237,42 @@ app.post("/edit-blog/:id", authenticateToken, async (req,res) => {
     }
 });
 
+// Delete a Travel Blog
+app.delete("/delete-blog/:id", authenticateToken, async (req,res) => {
+    const { id } = req.params;
+    const { userId } = req.user;
+
+    try{
+        // Find the travel story by ID and ensure it belongs to the authenticated user
+        const travelStory = await TravelBlog.findOne({ _id: id, userId: userId});
+        if(!travelStory){
+            return res.status(404).json({ error: true, message: "Travel story not found" });
+        }
+
+        // Delete the travel story from the database
+        await travelStory.deleteOne({ _id: id, userId: userId });
+
+        // Extract the filename from the imageUrl
+        const imageUrl = travelStory.imageUrl;
+        const filename = path.basename(imageUrl);
+
+        // Delete the file path
+        const filePath = path.join(__dirname, 'uploads', filename);
+
+        // Delete the image file from the uploads folder
+        fs.unlink(filePath, (err) => {
+            if(err){
+                console.error("Failed to delete image file:", err);
+                // Optionally, you could still respond with a success status here
+                // if you don't want to treat this as a critical error.
+            }
+        });
+
+        res.status(200).json({ message: "Travel story deleted successfully" });
+    }catch(error){
+        res.status(500).json({ error: true, message: error.message });
+    }
+});
+
 app.listen(8000);
 module.exports = app;

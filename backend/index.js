@@ -282,7 +282,7 @@ app.put("/update-is-favourite/:id", authenticateToken, async (req,res) => {
     const { userId } = req.user;
 
     try{
-        const travelStory = await travelStory.findOne({ _id: id, userId: userId });
+        const travelStory = await TravelBlog.findOne({ _id: id, userId: userId });
 
         if(!travelStory){
             return res.status(404).json({ error: true, message: "Travel story not found" });
@@ -291,7 +291,7 @@ app.put("/update-is-favourite/:id", authenticateToken, async (req,res) => {
         travelStory.isFavourite = isFavourite;
 
         await travelStory.save();
-        res.status(200).json({ story:travelStory, message:'Update Successful' });
+        res.status(200).json({ story: travelStory, message: "Update Successful" });
     }catch(error){
         res.status(500).json({ error: true, message: error.message });
     }

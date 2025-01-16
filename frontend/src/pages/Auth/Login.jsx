@@ -2,7 +2,7 @@ import React from 'react'
 
 const Login = () => {
   return (
-    <div className="h-screen bg-cyan-50 overflow-hidden relative">
+    <div className="h-screen bg-cyan-100 overflow-hidden relative">
       <div className="container h-screen flex items-center justify-center px-20 mx-auto">
         <div className="w-2/4 h-[90vh] flex items-end bg-login-bg-img bg-cover bg-center rounded-lg p-10 z-50">
           <div>
@@ -16,11 +16,14 @@ const Login = () => {
           </div>
         </div>
 
-        <div className="w-2/4 h-[75vh] bg-white rounded-r-lg relative p-16 shadow-lg shadow-cyan-200/20">
+        <div className="w-1/3 h-[75vh] bg-white rounded-r-lg relative p-16 shadow-lg shadow-cyan-200/20">
           <form onSubmit={() => {}}>
             <h4 className="text-2x1 font-semibold mb-7">Login</h4>
 
             <input type="text" placeholder="Email" className="input-box" />
+
+            <PasswordInput />
+
             <button type="submit" className="btn-primary">
               LOGIN
             </button>

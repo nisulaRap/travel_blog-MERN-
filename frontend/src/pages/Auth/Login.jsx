@@ -2,7 +2,7 @@ import { validateEmail } from "../../utils/helper";
 import axiosInstance from "../../utils/axiosInstance";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import PasswordInput from "../../components/PasswordInput";
+import PasswordInput from "../../components/input/PasswordInput";
 
 const Login = () => {
   const [email, setEmail] = useState("");

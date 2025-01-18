@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import PasswordInput from "../../components/input/PasswordInput";
-import { useNavigate } from "react-router-dom";
 import { validateEmail } from "../../utils/helper";
+import axiosInstance from "../../utils/axiosInstance";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import PasswordInput from "../../components/PasswordInput";
 
 const Login = () => {
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -19,7 +19,7 @@ const Login = () => {
       return;
     }
 
-    if (password) {
+    if (!password) {
       setError("Please enter a password.");
       return;
     }
@@ -27,11 +27,24 @@ const Login = () => {
     setError("");
 
     // Call the login API here
+    try {
+      const response = await axiosInstance.post("/login", {
+        email: email,
+        password: password,
+      });
+
+      // Handle successful login
+      if (response.data && response.data.accessToken) {
+        localStorage.setItem("token", response.data.accessToken);
+        navigate("/dashboard");
+      }
+    } catch (error) {
+      setError("Login failed. Please try again.");
+    }
   };
 
   return (
     <div className="h-screen bg-cyan-100 overflow-hidden relative">
-
       <div className="login-ui-box right-10 -top-40" />
       <div className="login-ui-box bg-cyan-200 -bottom-40 right-1/2" />
 
@@ -50,11 +63,24 @@ const Login = () => {
 
         <div className="w-1/3 h-[75vh] bg-white rounded-r-lg relative p-16 shadow-lg shadow-cyan-200/20">
           <form onSubmit={handleLogin}>
-            <h4 className="text-2x1 font-semibold mb-7">Login</h4>
+            <h4 className="text-2xl font-semibold mb-7">Login</h4>
 
-            <input type="text" placeholder="Email" className="input-box" value={email} onChange={({ target }) => { setEmail(target.value); }} />
+            <input
+              type="text"
+              placeholder="Email"
+              className="input-box"
+              value={email}
+              onChange={({ target }) => {
+                setEmail(target.value);
+              }}
+            />
 
-            <PasswordInput value={password} onChange={({ target }) => { setPassword(target.value); }} />
+            <PasswordInput
+              value={password}
+              onChange={({ target }) => {
+                setPassword(target.value);
+              }}
+            />
 
             {error && <p className="text-xs text-red-500 pb-1">{error}</p>}
 
@@ -64,7 +90,13 @@ const Login = () => {
 
             <p className="text-xs text-slate-500 text-center my-4">Or</p>
 
-            <button type="submit" className="btn-primary btn-light" onClick={() => {navigate("/signup");}}>
+            <button
+              type="button"
+              className="btn-primary btn-light"
+              onClick={() => {
+                navigate("/signup");
+              }}
+            >
               CREATE ACCOUNT
             </button>
           </form>
@@ -74,4 +106,4 @@ const Login = () => {
   );
 };
 
-export default Login
+export default Login;

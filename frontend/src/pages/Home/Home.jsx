@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
+
 
 const Home = () => {
   const navigate = useNavigate();
@@ -29,15 +30,15 @@ const Home = () => {
   useEffect(() => {
     getUserInfo();
   
-    return () => {
-      
-    }
+    return () => {}
   }, []);
   
 
   return (
     <>
       <Navbar userInfo={userInfo} />
+
+      <div className="container mx-auto py-10"></div>
     </>
   )
 }

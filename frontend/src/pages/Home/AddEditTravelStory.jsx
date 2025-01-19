@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { MdAdd, MdDeleteOutline, MdUpdate, MdClose } from "react-icons/md";
 import DateSelector from "../../components/input/DateSelector";
 
@@ -8,6 +8,8 @@ const AddEditTravelStory = ({
     onClose,
     getAllTravelStories,
 }) => {
+
+  const [visitedDate, setVisitedDate] = useState(null);
 
   const handleAddOrUpdateClick = () => {};
   return (
@@ -45,7 +47,7 @@ const AddEditTravelStory = ({
             placeholder="A Day at the Great Wall" />
 
             <div className="my-3">
-              <DateSelector /> 
+              <DateSelector date={visitedDate} setDate={setVisitedDate} /> 
             </div>
         </div>
       </div>

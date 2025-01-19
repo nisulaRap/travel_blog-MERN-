@@ -4,7 +4,14 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
+.rdp-root{
+    --rdp-accent-color: #01b0cb; /* Change the accent color to indigo. */
+    --rdp-accent-background-color: #dffbff; /* Change the accent background color. */
+    --rdp-day_button-border-radius: 8px;
+    --rdp-selected-font: bold medium var(--rdp-font-family);
+}
+
+@layer base {    
     html {
         font-family: "Poppins", "sans-serif";
     }

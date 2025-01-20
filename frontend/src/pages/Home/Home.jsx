@@ -20,7 +20,9 @@ const Home = () => {
     isShown: false,
     type: "add",
     data: null,
-  })
+  });
+
+  
 
   // Get User Info
   const getUserInfo = async () => {
@@ -105,7 +107,6 @@ const Home = () => {
                       date={item.visitedDate}
                       visitedLocation={item.visitedLocation}
                       isFavourite={item.isFavourite}
-                      onEdit={() => handleEdit(item)}
                       onClick={() => handleViewStory(item)}
                       onFavouriteClick={() => updateIsFavourite(item)}
                     />

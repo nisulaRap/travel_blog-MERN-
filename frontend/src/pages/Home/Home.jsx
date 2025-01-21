@@ -6,6 +6,7 @@ import { MdAdd } from "react-icons/md";
 import Modal from "react-modal";
 import TravelStoryCard from "../../components/Cards/TravelStoryCard";
 import AddEditTravelStory from "./AddEditTravelStory";
+import ViewTravelStory from "./ViewTravelStory";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -22,7 +23,10 @@ const Home = () => {
     data: null,
   });
 
-  
+  const [openViewModal, setOpenViewModal] = useState({
+    isShown: false,
+    data: null,
+  });
 
   // Get User Info
   const getUserInfo = async () => {
@@ -60,7 +64,9 @@ const Home = () => {
   const handleEdit = (data) =>{}
 
   // Handle Travel Story Click
-  const handleViewStory = (data) => {}
+  const handleViewStory = (data) => {
+    setOpenViewModal({ isShown: true, data });
+  };
 
   // Handle Update Favourite
   const updateIsFavourite = async (storyData) => {
@@ -144,6 +150,25 @@ const Home = () => {
           />
         </Modal>
 
+      {/* View Travel Story Model */}
+      <Modal
+        isOpen={openViewModal.isShown}
+        onRequestClose={() => {}}
+        style={{
+          overlay: {
+            backgroundColor: "rgba(0,0,0,0.2)",
+            zIndex: 999,
+          },
+        }}
+        appElement={document.getElementById("root")}
+        className="model-box">
+          <ViewTravelStory
+            storyInfo={openViewModal.data || null} 
+            onClose={() => {}}
+            onEditClick={() => {}}
+            onDeleteClick={() => {}}
+          />
+        </Modal>
 
       <button className="w-16 h-16 flex items-center justify-center rounded-full bg-primary hover:bg-cyan-400 fixed right-10 bottom-10" 
         onClick={() => { 

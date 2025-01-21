@@ -46,7 +46,7 @@ const AddEditTravelStory = ({
       });
 
       if (response.data && response.data.story) {
-        toast.success("Story added successfully");
+        toast.success("Story Added Successfully");
         //Refresh the stories
         getAllTravelStories();
         // Close the modal or form
@@ -86,8 +86,9 @@ const AddEditTravelStory = ({
 
   // Delete story image and Update the story
   const handleDeleteStoryImg = async () => {};
+
   return (
-    <div>
+    <div className="relative">
       <div className="flex items-center justify-between">
         <h5 className="text-xl font-medium text-slate-700">
           {type === "add" ? "Add Story" : "Update Story"}
@@ -103,7 +104,8 @@ const AddEditTravelStory = ({
                 <button className="btn-small" onClick={handleAddOrUpdateClick}>
                   <MdUpdate className="text-lg" /> UPDATE STORY
                 </button>
-              </>)}
+              </>
+            )}
 
             <button className="" onClick={onClose}>
               <MdClose className="text-xl text-slate-400" />

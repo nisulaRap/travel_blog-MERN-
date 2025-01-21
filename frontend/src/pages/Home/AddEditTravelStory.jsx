@@ -75,7 +75,7 @@ const AddEditTravelStory = ({
     try {
       let imageUrl = "";
 
-      const postData =  {
+      let postData =  {
         title,
         story,
         imageUrl: storyInfo.imageUrl || "",

@@ -8,11 +8,13 @@ import TravelStoryCard from "../../components/Cards/TravelStoryCard";
 import AddEditTravelStory from "./AddEditTravelStory";
 import ViewTravelStory from "./ViewTravelStory";
 import EmptyCard from "../../components/Cards/EmptyCard";
+import FilterInfoTitle from "../../components/Cards/FilterInfoTitle";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import EmptyImg from "../../assets/images/empty.svg";
+import { DayPicker } from "react-day-picker";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -22,6 +24,8 @@ const Home = () => {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [filterType, setFilterType] = useState("");
+
+  const [dateRange, setDateRange] = useState({ form: null, to: null });
 
   const [openAddEditModal, setOpenAddEditModal] = useState({
     isShown: false,
@@ -133,6 +137,39 @@ const Home = () => {
     getAllTravelStories();
   };
 
+  // Handle filter travel story by date range
+  const filterStoriesByDate = async (day) => {
+    try {
+      const startDate = day.from ? moment(day.from).valueOf() : null;
+      const endDate = day.to ? moment(day.to).valueOf() : null;
+
+      if (startDate && endDate) {
+        const response = await axiosInstance.get("/travel-stories/filter", {
+          params: { startDate, endDate },
+        });
+
+        if (response.data && response.data.stories){
+          setFilterType("date");
+          setAllStories(response.data.stories);
+        }
+      }
+    }catch(error){
+      console.log("An unexpectued error occurred. Please try again.");
+    }
+  };
+
+  // Handle date range select
+  const handleDayClick = (day) => {
+    setDateRange(day);
+    filterStoriesByDate(day);
+  };
+
+  const resetFilter = () => {
+    setDateRange({ from: null, to: null });
+    setFilterType("");
+    getAllTravelStories();
+  };
+
   useEffect(() => {
     getAllTravelStories();
     getUserInfo();
@@ -152,6 +189,15 @@ const Home = () => {
       />
 
       <div className="container mx-auto py-10">
+
+        <FilterInfoTitle
+          filterType={filterType}
+          filterDates={dateRange}
+          onClear={() => {
+            resetFilter();
+          }}
+        />
+
         <div className="flex gap-7">
           <div className="flex-1">
             {allStories.length > 0 ? (
@@ -180,7 +226,19 @@ const Home = () => {
             )}
           </div>
 
-          <div className="w-[320px]"></div>
+          <div className="w-[350px]">
+            <div className="bg-white border border--slate-200 shadow-lg shadow-slate-200/60 rounded-lg">
+              <div className="p-3">
+                <DayPicker 
+                  captionLayout="dropdown-buttons"
+                  mode="range"
+                  selected={dateRange}
+                  onSelect={handleDayClick}
+                  pagedNavigation
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

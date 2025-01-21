@@ -15,38 +15,90 @@ const AddEditTravelStory = ({
     getAllTravelStories,
 }) => {
 
-  const [title, setTitle] = useState("");
-  const [storyImg, setStoryImg] = useState(null);
-  const [story, setStory] = useState("");
-  const [visitedLocation, setVisitedLocation] = useState([]);
-  const [visitedDate, setVisitedDate] = useState(null);
+  const [title, setTitle] = useState(storyInfo?.title || "");
+  const [storyImg, setStoryImg] = useState(storyInfo?.imageUrl || null);
+  const [story, setStory] = useState(storyInfo?.story || "");
+  const [visitedLocation, setVisitedLocation] = useState(storyInfo?.visitedLocation || []);
+  const [visitedDate, setVisitedDate] = useState(storyInfo?.visitedDate || null);
 
   const [error, setError] = useState("");
 
   // Add new travel story
   const addNewTravelStory = async () => {
+  try {
+    let imageUrl = "";
+
+    // Upload image if present
+    if (storyImg) {
+      const imgUploadRes = await uploadImage(storyImg);
+      // Get image URL
+      imageUrl = imgUploadRes.imageUrl || "";
+    }
+
+    const response = await axiosInstance.post("/add-travel", {
+      title,
+      story,
+      imageUrl: imageUrl || "",
+      visitedLocation,
+      visitedDate: visitedDate
+        ? moment(visitedDate).valueOf()
+        : moment().valueOf(),
+    });
+
+    if (response.data && response.data.story) {
+      toast.success("Story Added Successfully");
+      // Refresh the stories
+      getAllTravelStories();
+      // Close the modal or form
+      onClose();
+    }
+
+  } catch (error) {
+    if (
+      error.response &&
+      error.response.data &&
+      error.response.data.message
+    ) {
+      setError(error.response.data.message);
+    } else {
+      // Handle unexpected errors
+      setError("An unexpected error occurred. Please try again.");
+    }
+  }
+};
+
+
+  // Update travel story
+  const updateTravelStory = async () => {
+    const storyId = storyInfo._id;
+
     try {
       let imageUrl = "";
 
-      // Upload image if present
-      if (storyImg) {
-        const imgUploadRes = await uploadImage(storyImg);
-        // Get image URL
-        imageUrl = imgUploadRes.data.imageUrl || "";
-      }
-
-      const response = await axiosInstance.post("/add-travel", {
+      const postData =  {
         title,
         story,
-        imageUrl: imageUrl || "",
+        imageUrl: storyInfo.imageUrl || "",
         visitedLocation,
         visitedDate: visitedDate
           ? moment(visitedDate).valueOf()
           : moment().valueOf(),
-      });
+      };
+
+      if (typeof storyImg === "object") {
+        //Upload New Image
+        const imgUploadRes = await uploadImage(storyImg);
+        imageUrl = imgUploadRes.imageUrl || "";
+        postData = {
+          ...postData,
+          imageUrl: imageUrl,
+        };
+      };
+
+      const response = await axiosInstance.put("/edit-blog/" + storyId, postData);
 
       if (response.data && response.data.story) {
-        toast.success("Story Added Successfully");
+        toast.success("Story Updated Successfully");
         //Refresh the stories
         getAllTravelStories();
         // Close the modal or form
@@ -54,13 +106,18 @@ const AddEditTravelStory = ({
       }
 
     } catch (error) {
-  
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        setError(error.response.data.message);
+      } else {
+        // Handle unexpected errors
+        setError("An unexpected error occurred. Please try again.");
+      }
     }
-};
-
-
-  // Update travel story
-  const updateTravelStory = async () => {};
+  };
 
   const handleAddOrUpdateClick = () => {
     console.log("Input Data:",{title, storyImg, story, visitedLocation, visitedDate});

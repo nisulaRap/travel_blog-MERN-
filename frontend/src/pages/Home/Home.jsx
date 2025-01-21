@@ -9,11 +9,11 @@ import AddEditTravelStory from "./AddEditTravelStory";
 import ViewTravelStory from "./ViewTravelStory";
 import EmptyCard from "../../components/Cards/EmptyCard";
 import FilterInfoTitle from "../../components/Cards/FilterInfoTitle";
+import { getEmptyCardMessage, getEmptyCardImg } from "../../utils/helper";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import EmptyImg from "../../assets/images/empty.svg";
 import { DayPicker } from "react-day-picker";
 
 const Home = () => {
@@ -91,7 +91,14 @@ const Home = () => {
 
       if (response.data && response.data.story) {
         toast.success("Story Updated Successfully");
-        getAllTravelStories();
+
+        if(filterType === "search" && searchQuery) {
+          onSearchStory(searchQuery);
+        }else if (filterType === "date") {
+          filterStoriesByDate(dateRange);
+        }else{
+          getAllTravelStories();
+        }
       }
     }catch (error) {
       console.log("An unexpected error occurred. Please try again.");
@@ -220,8 +227,8 @@ const Home = () => {
               </div>
             ) : (
               <EmptyCard 
-                imgSrc={EmptyImg} 
-                message={`Start creating your first travel story! Click the 'Add' button to jot down your thoughts, ideas and memories. Let's get started`} 
+                imgSrc={getEmptyCardImg(filterType)} 
+                message={getEmptyCardMessage(filterType)}
               />
             )}
           </div>

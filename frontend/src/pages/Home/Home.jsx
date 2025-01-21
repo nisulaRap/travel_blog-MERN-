@@ -7,9 +7,12 @@ import Modal from "react-modal";
 import TravelStoryCard from "../../components/Cards/TravelStoryCard";
 import AddEditTravelStory from "./AddEditTravelStory";
 import ViewTravelStory from "./ViewTravelStory";
+import EmptyCard from "../../components/Cards/EmptyCard";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+import EmptyImg from "../../assets/images/empty.svg";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -88,6 +91,22 @@ const Home = () => {
     }
   };
 
+  // Handle Delete Travel Story
+  const deleteTravelStory = async (data) => {
+    const storyId = data._id;
+
+    try {
+      const response = await axiosInstance.delete("/delete-blog/" + storyId);
+      if (response.data && response.data.error) {
+        toast.error("Story Deleted Successfully");
+        setOpenViewModal((prevState) => ({ ...prevState, isShown: false }));
+        getAllTravelStories();
+      }
+    } catch (error) {
+      console.log("An unexpected error occurred. Please try again.");
+    }
+  };
+
   useEffect(() => {
     getAllTravelStories();
     getUserInfo();
@@ -122,7 +141,10 @@ const Home = () => {
                 })}
               </div>
             ) : (
-              <>Empty Card here</>
+              <EmptyCard 
+                imgSrc={EmptyImg} 
+                message={`Start creating your first travel story! Click the 'Add' button to jot down your thoughts, ideas and memories. Let's get started`} 
+              />
             )}
           </div>
 
@@ -173,7 +195,9 @@ const Home = () => {
               setOpenViewModal((prevState) => ({ ...prevState, isShown: false }));
               handleEdit(openViewModal.data || null);
             }}
-            onDeleteClick={() => {}}
+            onDeleteClick={() => {
+              deleteTravelStory(openViewModal.data || null);
+            }}
           />
         </Modal>
 

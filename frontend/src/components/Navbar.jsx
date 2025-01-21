@@ -18,7 +18,18 @@ const Navbar = ({ userInfo }) => {
     <div className='bg-white flex items-center justify-between px-6 py-2 drop-shadow sticky top-0 z-10'>
       <img src={LOGO} alt="travel blog" className="h-16" />
 
-      {isToken && <ProfileInfo userInfo={userInfo} onLogout={onLogout} />}
+      {isToken && (
+        <>
+          <SearchBar  
+            value={searchQuery}
+            onChange={({ target }) => setSearchQuery(target.value)}
+            handleSearch={handleSearch}
+            onClearSearch={onClearSearch}
+          />
+        
+       <ProfileInfo userInfo={userInfo} onLogout={onLogout} />{" "}
+      </>
+      )}
     </div>
   );
 };

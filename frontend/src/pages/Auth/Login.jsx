@@ -44,7 +44,7 @@ const Login = () => {
   };
 
   return (
-    <div className="h-screen bg-[#c7f9fd] overflow-hidden relative"> {/*bg-[#e8f9fd]*/}
+    <div className="h-screen bg-[#a0d2eb] overflow-hidden relative"> {/*bg-[#e8f9fd]*/}
       {/*<div className="login-ui-box bg-black right-10 -top-40" />
       <div className="login-ui-box bg-red-200 -bottom-40 right-1/2" />*/}
 

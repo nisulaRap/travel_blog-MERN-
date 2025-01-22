@@ -14,7 +14,7 @@ const TravelStoryCard = ({
     onClick,
 }) => {
   return (
-    <div className="border rounded-lg overflow-hidden bg-white hover:shadow-lg hover:shadow-slate-200 transition-all ease-in-out relative cursor-pointer">
+    <div className="border rounded-lg overflow-hidden bg-white hover:shadow-lg hover:shadow-slate-200 transition-all ease-in-out relative cursor-pointer ml-8">
         <img src={imgUrl} alt={title} className="w-full h-56 object-cover rounded-lg" onClick={onClick} />
 
         <button className="w-12 h-12 flex items-center justify-center bg-white/40 rounded-lg border border-white/30 absolute top-4 right-4" onClick={onFavouriteClick}>

@@ -233,7 +233,7 @@ const Home = () => {
             )}
           </div>
 
-          <div className="w-[350px]">
+          <div className="w-[350px] mr-8">
             <div className="bg-white border border--slate-200 shadow-lg shadow-slate-200/60 rounded-lg">
               <div className="p-3">
                 <DayPicker 

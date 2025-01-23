@@ -10,23 +10,19 @@ import ViewTravelStory from "./ViewTravelStory";
 import EmptyCard from "../../components/Cards/EmptyCard";
 import FilterInfoTitle from "../../components/Cards/FilterInfoTitle";
 import { getEmptyCardMessage, getEmptyCardImg } from "../../utils/helper";
-
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 import { DayPicker } from "react-day-picker";
+import moment from "moment";
 
 const Home = () => {
   const navigate = useNavigate();
 
   const [userInfo, setUserInfo] = useState(null);
   const [allStories, setAllStories] = useState([]);
-
   const [searchQuery, setSearchQuery] = useState("");
   const [filterType, setFilterType] = useState("");
-
-  const [dateRange, setDateRange] = useState({ form: null, to: null });
-
+  const [dateRange, setDateRange] = useState({ from: null, to: null });
   const [openAddEditModal, setOpenAddEditModal] = useState({
     isShown: false,
     type: "add",
@@ -86,11 +82,11 @@ const Home = () => {
 
     try{
       const response = await axiosInstance.put("/update-is-favourite/" + storyId,
-        { isFavourite: !storyData.isFavourite, }
+        { isFavourite: !storyData.isFavourite }
       );
 
       if (response.data && response.data.story) {
-        toast.success("Story Updated Successfully");
+        {/*toast.success("Story Updated Successfully");*/}
 
         if(filterType === "search" && searchQuery) {
           onSearchStory(searchQuery);
@@ -111,7 +107,7 @@ const Home = () => {
 
     try {
       const response = await axiosInstance.delete("/delete-blog/" + storyId);
-      if (response.data && response.data.error) {
+      if (response.data && !response.data.error) {
         toast.error("Story Deleted Successfully");
         setOpenViewModal((prevState) => ({ ...prevState, isShown: false }));
         getAllTravelStories();
@@ -152,7 +148,7 @@ const Home = () => {
 
       if (startDate && endDate) {
         const response = await axiosInstance.get("/travel-stories/filter", {
-          params: { startDate, endDate },
+          params: { startDate, endDate }
         });
 
         if (response.data && response.data.stories){
@@ -161,7 +157,7 @@ const Home = () => {
         }
       }
     }catch(error){
-      console.log("An unexpectued error occurred. Please try again.");
+      console.log("An unexpected error occurred. Please try again.");
     }
   };
 
@@ -234,7 +230,7 @@ const Home = () => {
           </div>
 
           <div className="w-[350px] mr-8">
-            <div className="bg-white border border--slate-200 shadow-lg shadow-slate-200/60 rounded-lg">
+            <div className="bg-blue-50 border border--slate-200 shadow-lg shadow-slate-200/60 rounded-lg">
               <div className="p-3">
                 <DayPicker 
                   captionLayout="dropdown-buttons"
@@ -307,7 +303,7 @@ const Home = () => {
 
       <ToastContainer />
     </>
-  )
-}
+  );
+};
   
 export default Home;

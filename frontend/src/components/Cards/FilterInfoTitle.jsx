@@ -5,9 +5,7 @@ import { MdOutlineClose } from "react-icons/md";
 const FilterInfoTitle = ({ filterType, filterDates, onClear }) => {
 
     const DateRangeChip = ({ date }) => {
-        const startDate = date?.from
-            ? moment(date?.from).format("Do MMM YYYY")
-            : "N/A";
+        const startDate = date?.from ? moment(date?.from).format("Do MMM YYYY") : "N/A";
         const endDate = date?.to ? moment(date?.to).format("Do MMM YYYY") : "N/A";
 
         return (
@@ -31,7 +29,6 @@ const FilterInfoTitle = ({ filterType, filterDates, onClear }) => {
             ) : (
                 <div className="flex items-center gap-2">
                     <h3 className="text-lg font-medium ml-8">Travel Stories from</h3>
-
                     <DateRangeChip date={filterDates} />
                 </div>
             )}

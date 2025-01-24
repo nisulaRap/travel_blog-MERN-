@@ -1,6 +1,6 @@
 import ADD_STORY_IMG from '../assets/images/empty.svg';
-import NO_SEARCH_DATA_IMG from '../assets/images/empty.svg';
-import NO_FILTER_DATA_IMG from '../assets/images/empty.svg';
+import NO_SEARCH_DATA_IMG from '../assets/images/empty-search.svg';
+import NO_FILTER_DATA_IMG from '../assets/images/empty-date.svg';
 
 export const validateEmail = (email) => {
   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

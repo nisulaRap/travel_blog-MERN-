@@ -223,7 +223,7 @@ app.put("/edit-blog/:id", authenticateToken, async (req,res) => {
             return res.status(404).json({ error: true, message: "Travel story not found" });
         }
 
-        const placeholderImgUrl = `http://localhost:8000/assets/travel-blog.png`;
+        const placeholderImgUrl = `http://localhost:8000/assets/bg-travel-empty.png`;
 
         travelStory.title = title;
         travelStory.story = story;

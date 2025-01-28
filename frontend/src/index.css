@@ -54,6 +54,10 @@
         @apply w-80 h-[450px] rounded-full bg-primary absolute rotate-45;
     }
 
+    .login-ui-box-2 {
+        @apply w-40 h-[225px] rounded-full bg-primary absolute rotate-45;
+    }
+
     .model-box {
         @apply w-[80vw] md:w-[40%] h-[80vh] bg-white rounded-lg mx-auto mt-14 p-5 overflow-y-scroll scrollbar z-50;
     }

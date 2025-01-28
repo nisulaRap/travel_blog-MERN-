@@ -52,8 +52,10 @@ const SignUp = () => {
 
   return (
     <div className="h-screen bg-[#a0d2eb] overflow-hidden relative">
-      {/*<div className="login-ui-box right-10 -top-40" />
-      <div className="login-ui-box bg-cyan-200 -bottom-40 right-1/2" />*/}
+      {/*<div className="login-ui-box bg-[#e8f9fd] right-10 -top-40" />
+      <div className="login-ui-box bg-[#e8f9fd] -bottom-40 right-1/2" />
+      <div className="login-ui-box-2 bg-[#e8f9fd] -bottom-6 right-28" />
+      <div className="login-ui-box-2 bg-[#e8f9fd] -top-10 left-20" />*/}
 
       <div className="container h-screen flex items-center justify-center px-20 mx-auto">
         <div className="w-2/4 h-[80vh] flex items-end bg-signup-bg-img bg-cover bg-center rounded-lg p-10 z-50">

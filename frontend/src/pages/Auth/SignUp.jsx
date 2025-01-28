@@ -43,7 +43,7 @@ const SignUp = () => {
       // Handle successful login
       if (response.data && response.data.accessToken) {
         localStorage.setItem("token", response.data.accessToken);
-        navigate("/dashboard");
+        navigate("/login");
       }
     } catch (error) {
       setError("An unexpected error occurred. Please try again.");

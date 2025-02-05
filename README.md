@@ -23,8 +23,8 @@ Travel Blog is a full-stack web application built using the MERN (MongoDB, Expre
 ### Setup Instructions
 1. **Clone the repository:**
    ```sh
-   git clone https://github.com/your-username/travel-blog-mern.git
-   cd travel-blog-mern
+   git clone https://github.com/nisulaRap/travel_blog-MERN-.git
+   cd travel_blog-MERN-
    ```
 
 2. **Backend Setup:**
